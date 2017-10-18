@@ -22,27 +22,32 @@ class Blog(db.Model):
 @app.route('/blog', methods=['POST', 'GET'])
 def index():
 
+    entries = Blog.query.all()
+    return render_template('blog.html',title="Blog", 
+        entries=entries)
+
+
+@app.route('/newpost', methods=['POST', 'GET'])
+def create_new_entry():
+
     if request.method == 'POST':
         title = request.form['title']
         body = request.form['body']
         new_entry = Blog(title, body)
         db.session.add(new_entry)
         db.session.commit()
-
-    entries = Blog.query.all()
-    return render_template('blog.html',title="Blog", 
-        entries=entries)
+        return redirect('/blog')
+    return render_template('newpost.html', title="New Post")
 
 
-@app.route('/new-post', methods=['POST'])
-def delete_task():
+#def create_new_entry():
 
-    entry_id = int(request.form['id'])
-    entry = Blog.query.get(entry_id)
-    db.session.add(entry)
-    db.session.commit()
+    #entry_id = int(request.form['id'])
+    #entry = Blog.query.get(entry_id)
+    #db.session.add(entry)
+    #db.session.commit()
 
-    return redirect('/')
+    #return redirect('/')
 
 
 if __name__ == '__main__':

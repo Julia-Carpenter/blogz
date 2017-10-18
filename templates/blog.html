@@ -1,34 +1,19 @@
 {% extends "base.html" %}
 
 {% block content %}
-    <h1>New Entry</h1>
-    <form method='post'>
-        <label>
-            Title:
-            <input type="text" name='title' />
-        </label>
-        <label>
-            Body:
-            <input type="text" name='body' />
-        </label>
-        <input type="submit" value='Submit' />
-    </form>
-
-    <hr />
-
+   
+    <h1><center>Build a Blog</center></h1>
     {% if entries|length == 0 %}
     <p>No entries yet</p>
     {% else %}
 
-        <ul>
-            {% for entry in entries %}
-            <li><h3>{{entry.title}}</h3>
-            <p>{{entry.body}}</p></li>
-            {% endfor %}
-        </ul>
+        {% for entry in entries %}
+        <h2>{{entry.title}}</h2>
+        <p>{{entry.body}}</p>
+        <hr />
+        {% endfor %}
 
     {% endif %}
 
-    <hr />
 
 {% endblock %}

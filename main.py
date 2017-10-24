@@ -46,6 +46,11 @@ def create_new_entry():
     return render_template('newpost.html', title="New Post")
 
 
+@app.route('/entry')
+def display_entry():
+    headline = request.args.get('title')
+    body = request.args.get('body')
+    return render_template('entry.html', title="Blog Entry", headline=headline, body=body)
 #def create_new_entry():
 
     #entry_id = int(request.form['id'])

@@ -8,7 +8,7 @@
     {% else %}
 
         {% for entry in entries %}
-        <h2>{{entry.title}}</h2>
+        <h2><a href="./blog?id="+ ##GET ID HERE##>{{entry.title}}</a></h2>
         <p>{{entry.body}}</p>
         <hr />
         {% endfor %}

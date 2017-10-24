@@ -48,8 +48,10 @@ def create_new_entry():
 
 @app.route('/entry')
 def display_entry():
-    headline = request.args.get('title')
-    body = request.args.get('body')
+    id = request.args.get('id')
+    entry = Blog.query.filter_by(id=id).first()
+    headline = entry.title
+    body = entry.body
     return render_template('entry.html', title="Blog Entry", headline=headline, body=body)
 #def create_new_entry():
 

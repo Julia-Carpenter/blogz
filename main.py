@@ -22,6 +22,12 @@ class Blog(db.Model):
 
 @app.route('/blog', methods=['POST', 'GET'])
 def index():
+    if request.args:
+        id = request.args.get('id')
+        entry = Blog.query.filter_by(id=id).first()
+        headline = entry.title
+        body = entry.body
+        return render_template('entry.html', title="Blog Entry", headline=headline, body=body)
 
     entries = Blog.query.all()
     return render_template('blog.html',title="Blog", 
@@ -30,37 +36,22 @@ def index():
 
 @app.route('/newpost', methods=['POST', 'GET'])
 def create_new_entry():
-
+    headline = ""
+    body = ""
     if request.method == 'POST':
-        title = request.form['title']
+        headline = request.form['headline']
         body = request.form['body']
-        if title and body:
-            new_entry = Blog(title, body)
+        if headline and body:
+            new_entry = Blog(headline, body)
             db.session.add(new_entry)
             db.session.commit()
             return redirect('/blog')
-        elif not title:
+        elif not headline:
             flash('Please add a title.', 'error')
         elif not body:
             flash('Please add content!', 'error')
-    return render_template('newpost.html', title="New Post")
+    return render_template('newpost.html', title="New Post", headline=headline, body=body)
 
-
-@app.route('/entry')
-def display_entry():
-    id = request.args.get('id')
-    entry = Blog.query.filter_by(id=id).first()
-    headline = entry.title
-    body = entry.body
-    return render_template('entry.html', title="Blog Entry", headline=headline, body=body)
-#def create_new_entry():
-
-    #entry_id = int(request.form['id'])
-    #entry = Blog.query.get(entry_id)
-    #db.session.add(entry)
-    #db.session.commit()
-
-    #return redirect('/')
 
 
 if __name__ == '__main__':

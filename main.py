@@ -45,7 +45,9 @@ def create_new_entry():
             new_entry = Blog(headline, body)
             db.session.add(new_entry)
             db.session.commit()
-            return redirect('/blog')
+            thisentry = Blog.query.order_by('-id').first()
+            id = str(thisentry.id)
+            return redirect('/blog?id=' + id)
         elif not headline:
             flash('Please add a title.', 'error')
         elif not body:

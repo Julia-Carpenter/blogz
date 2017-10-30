@@ -34,6 +34,66 @@ class User(db.Model):
         self.password = password
 
 
+#TODO Not sure if these are the only allowed routes
+#@app.before_request
+#def require_login():
+    #allowed_routes = ['login', 'signup']
+    #if request.endpoint not in allowed_routes and 'username' not in session:
+        #return redirect('/login')
+
+
+@app.route('/login', methods=['POST', 'GET'])
+def login():
+    if request.method == 'POST':
+        username = request.form['username']
+        password = request.form['password']
+        user = User.query.filter_by(username=username).first()
+        if user and user.password == password:
+            session['username'] = username
+            flash("Logged in")
+            return redirect('/newpost')
+        if not user:
+            flash('User does not exist', 'error')
+        else:
+            flash('User password incorrect', 'error')
+
+    return render_template('login.html')
+
+
+@app.route('/signup', methods=['POST', 'GET'])
+def signup():
+    if request.method == 'POST':
+        username = request.form['username']
+        password = request.form['password']
+        verify = request.form['verify']
+
+        # TODO - validate user's data
+        if not username or not password or not verify:
+            flash("One or more fields are invalid", 'error')
+
+        elif password != verify:
+            flash("The passwords entered do not match.", 'error')
+
+        elif len(password) <= 2:
+            flash("password must exceed 2 characters", 'error')
+
+        elif len(username) <= 2:
+            flash("username must exceed 2 characters", 'error')
+
+        #existing_user = User.query.filter_by(username=username).first()
+        #if existing_user:
+            #flash("The username <strong>{0}</strong> is already registered".format(username), 'error')
+
+        else:
+            new_user = User(username, password)
+            db.session.add(new_user)
+            db.session.commit()
+            session['username'] = username
+            return redirect('/newpost')
+    return render_template('signup.html')
+
+
+
 @app.route('/blog', methods=['POST', 'GET'])
 def index():
     if request.args:

@@ -35,11 +35,17 @@ class User(db.Model):
 
 
 #TODO Not sure if these are the only allowed routes
-#@app.before_request
-#def require_login():
-    #allowed_routes = ['login', 'signup']
-    #if request.endpoint not in allowed_routes and 'username' not in session:
-        #return redirect('/login')
+@app.before_request
+def require_login():
+    allowed_routes = ['login', 'signup', 'homepage', 'index']
+    if request.endpoint not in allowed_routes and 'username' not in session:
+        return redirect('/login')
+
+
+@app.route('/')
+def homepage():
+    users=User.query.all()
+    return render_template('index.html', users=users)
 
 
 @app.route('/login', methods=['POST', 'GET'])
@@ -92,6 +98,11 @@ def signup():
             return redirect('/newpost')
     return render_template('signup.html')
 
+
+@app.route('/logout', methods=['GET', 'POST'])
+def logout():
+    del session['username']
+    return redirect('/blog')
 
 
 @app.route('/blog', methods=['POST', 'GET'])

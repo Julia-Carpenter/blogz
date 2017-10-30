@@ -112,7 +112,9 @@ def index():
         entry = Blog.query.filter_by(id=id).first()
         headline = entry.title
         body = entry.body
-        return render_template('entry.html', title="Blog Entry", headline=headline, body=body)
+        #owner = User.query.filter_by(username=session['username'])
+        owner = session['username']
+        return render_template('entry.html', title="Blog Entry", headline=headline, body=body, owner=owner)
 
     entries = Blog.query.all()
     return render_template('blog.html',title="Blog", 

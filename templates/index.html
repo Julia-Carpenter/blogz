@@ -3,7 +3,8 @@
 {% block content %}
     <ul>
     {% for name in users %}
-      <li> {{ name.username }} </li>
+        <li><a href="./blog?user={{name.id}}">{{name.username}}</a></li>
+      <!--<li> <a href="./blog?user={{authorId}}">{{ name.username }}</a> </li>-->
     {% endfor %}
     </ul>
 {% endblock %}

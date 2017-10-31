@@ -107,16 +107,20 @@ def logout():
 
 @app.route('/blog', methods=['POST', 'GET'])
 def index():
-    if request.args:
-        id = request.args.get('id')
+    owner = session['username']
+    id = request.args.get('id')
+    if id:
         entry = Blog.query.filter_by(id=id).first()
         headline = entry.title
         body = entry.body
-        #owner = User.query.filter_by(username=session['username'])
-        owner = session['username']
-        return render_template('entry.html', title="Blog Entry", headline=headline, body=body, owner=owner)
-
+        authorId = User.query.filter_by(username=owner).first()
+        authorId = authorId.id
+        return render_template('entry.html', title="Blog Entry", headline=headline, body=body, authorId=authorId)
     entries = Blog.query.all()
+    userId = request.args.get('user')
+    if userId:
+        thisuser = User.query.filter_by(id=userId).first()
+        return render_template('usersposts.html', title=userId, userId = userId, entries=entries, thisuser=thisuser)
     return render_template('blog.html',title="Blog", 
         entries=entries)
 

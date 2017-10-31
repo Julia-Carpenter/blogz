@@ -2,10 +2,7 @@
 
 {% block content %}
    
-    <h1><center>{{thisuser}}</center></h1>
-    {% if entries|length == 0 %}
-    <p>No entries yet</p>
-    {% else %}
+    <h1><center>{{thisuser.username}}</center></h1>
 
         {% for entry in entries %}
         <h2><a href="./blog?id={{entry.id}}">{{entry.title}}</a></h2>
@@ -14,7 +11,6 @@
         <hr />
         {% endfor %}
 
-    {% endif %}
 
 
 {% endblock %}

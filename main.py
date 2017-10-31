@@ -113,14 +113,14 @@ def index():
         entry = Blog.query.filter_by(id=id).first()
         headline = entry.title
         body = entry.body
-        authorId = User.query.filter_by(username=owner).first()
-        authorId = authorId.id
-        return render_template('entry.html', title="Blog Entry", headline=headline, body=body, authorId=authorId)
-    entries = Blog.query.all()
+        authorId = entry.owner.id
+        return render_template('entry.html', title="Blog Entry", headline=headline, body=body, authorId=authorId, owner=owner)
     userId = request.args.get('user')
     if userId:
         thisuser = User.query.filter_by(id=userId).first()
+        entries = Blog.query.filter_by(owner_id=userId)
         return render_template('usersposts.html', title=userId, userId = userId, entries=entries, thisuser=thisuser)
+    entries = Blog.query.all()
     return render_template('blog.html',title="Blog", 
         entries=entries)
 
